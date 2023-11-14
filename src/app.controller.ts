@@ -11,7 +11,7 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    const version = this.configService.get('version');
+    const version = this.configService.get('VERSION');
     return this.appService.getVersion(version);
   }
 }

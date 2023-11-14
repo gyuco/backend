@@ -73,7 +73,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 Nest is [MIT licensed](LICENSE).
 
 ## TODO LIST
-- [ ] Add environments
+- [*] Add environments
 - [ ] Add orm + crud
 - [ ] Add login, tokens, strategies, guards
 - [ ] Add i18n
