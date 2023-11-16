@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { RolesModule } from './modules/roles/roles.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { RolesModule } from './modules/roles/roles.module';
         ? '.env.' + process.env.NODE_ENV
         : '.env',
     }),
-    RolesModule,
+    PrismaModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

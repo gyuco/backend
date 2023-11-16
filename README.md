@@ -79,3 +79,6 @@ Nest is [MIT licensed](LICENSE).
 - [ ] Add i18n
 - [ ] Add swagger
 - [ ] Add logging system
+
+## PRISMA
+https://www.prisma.io/blog/nestjs-prisma-rest-api-7D056s1BmOL0
