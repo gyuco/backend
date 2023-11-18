@@ -5,7 +5,6 @@ import { Role as _Role } from './role';
 import { Permission as _Permission } from './permission';
 import { RolePermission as _RolePermission } from './role_permission';
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PrismaModel {
   export class Provider extends _Provider {}
   export class Login extends _Login {}

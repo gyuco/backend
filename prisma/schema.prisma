@@ -20,13 +20,12 @@ model Provider {
   name       String
   created_at DateTime @default(now())
   logins     Login[]
-
   @@map("providers")
 }
 
 model Login {
   id         Int      @id @default(autoincrement())
-  username   String
+  username   String @unique
   password   String
   token      String?
   created_at DateTime @default(now())
