@@ -1,6 +1,7 @@
+import { Login } from './login';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class providers {
+export class Provider {
   @ApiProperty({ type: Number })
   id: number;
 
@@ -10,6 +11,6 @@ export class providers {
   @ApiProperty({ type: Date })
   created_at: Date;
 
-  @ApiProperty({ isArray: true, type: () => logins })
-  logins: logins[];
+  @ApiProperty({ isArray: true, type: () => Login })
+  logins: Login[];
 }

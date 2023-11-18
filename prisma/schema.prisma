@@ -6,7 +6,8 @@ generator client {
 }
 
 generator prismaClassGenerator {
-    provider = "prisma-class-generator"
+  provider = "prisma-class-generator"
+  dryRun   = false
 }
 
 datasource db {
@@ -14,72 +15,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model providers {
+model Provider {
   id         Int      @id @default(autoincrement())
   name       String
   created_at DateTime @default(now())
-  logins     logins[]
+  logins     Login[]
+
+  @@map("providers")
 }
 
-model logins {
-  id         Int       @id @default(autoincrement())
+model Login {
+  id         Int      @id @default(autoincrement())
   username   String
   password   String
   token      String?
-  created_at DateTime  @default(now())
+  created_at DateTime @default(now())
   active     Boolean
-  provider   providers @relation(fields: [providerId], references: [id])
+  provider   Provider @relation(fields: [providerId], references: [id])
   providerId Int
-  user       users     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
   userId     Int
+
+  @@map("logins")
 }
 
-model users {
-  id         Int        @id @default(autoincrement())
+model User {
+  id         Int      @id @default(autoincrement())
   firstname  String
   lastname   String
-  created_at DateTime   @default(now())
-  logins     logins[]
-  profiles   profiles[]
-}
-
-model profiles {
-  id         Int      @id @default(autoincrement())
-  name       String
-  country    String
-  city       String
-  postalcode String
-  address    String
-  birthday   DateTime
   created_at DateTime @default(now())
-  user       users    @relation(fields: [userId], references: [id])
-  userId     Int
-  role       roles    @relation(fields: [roleId], references: [id])
-  roleId     Int
+  logins     Login[]
+  roles      Role[]
+
+  @@map("users")
 }
 
-model roles {
-  id               Int                @id @default(autoincrement())
+model Role {
+  id             Int              @id @default(autoincrement())
+  name           String
+  created_at     DateTime         @default(now())
+  permissions    Permission[]
+  User           User?            @relation(fields: [userId], references: [id])
+  userId         Int?
+  RolePermission RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id               Int              @id @default(autoincrement())
   name             String
-  created_at       DateTime           @default(now())
-  permissions      permissions[]
-  profiles         profiles[]
-  role_permissions role_permissions[]
+  created_at       DateTime         @default(now())
+  role_permissions RolePermission[]
+  Role             Role?            @relation(fields: [roleId], references: [id])
+  roleId           Int?
+
+  @@map("permissions")
 }
 
-model permissions {
-  id               Int                @id @default(autoincrement())
-  name             String
-  created_at       DateTime           @default(now())
-  role             roles              @relation(fields: [roleId], references: [id])
-  roleId           Int
-  role_permissions role_permissions[]
-}
-
-model role_permissions {
-  id           Int         @id @default(autoincrement())
-  role         roles       @relation(fields: [roleId], references: [id])
+model RolePermission {
+  id           Int        @id @default(autoincrement())
+  read         Boolean
+  write        Boolean
+  delete       Boolean
+  role         Role       @relation(fields: [roleId], references: [id])
   roleId       Int
-  permission   permissions @relation(fields: [permissionId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
   permissionId Int
+
+  @@map("role_permissions")
 }

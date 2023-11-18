@@ -1,8 +1,8 @@
-import { logins } from './logins';
-import { profiles } from './profiles';
+import { Login } from './login';
+import { Role } from './role';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class users {
+export class User {
   @ApiProperty({ type: Number })
   id: number;
 
@@ -15,9 +15,9 @@ export class users {
   @ApiProperty({ type: Date })
   created_at: Date;
 
-  @ApiProperty({ isArray: true, type: () => logins })
-  logins: logins[];
+  @ApiProperty({ isArray: true, type: () => Login })
+  logins: Login[];
 
-  @ApiProperty({ isArray: true, type: () => profiles })
-  profiles: profiles[];
+  @ApiProperty({ isArray: true, type: () => Role })
+  roles: Role[];
 }

@@ -1,8 +1,8 @@
-import { providers } from './providers';
-import { users } from './users';
+import { Provider } from './provider';
+import { User } from './user';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class logins {
+export class Login {
   @ApiProperty({ type: Number })
   id: number;
 
@@ -21,14 +21,14 @@ export class logins {
   @ApiProperty({ type: Boolean })
   active: boolean;
 
-  @ApiProperty({ type: () => providers })
-  provider: providers;
+  @ApiProperty({ type: () => Provider })
+  provider: Provider;
 
   @ApiProperty({ type: Number })
   providerId: number;
 
-  @ApiProperty({ type: () => users })
-  user: users;
+  @ApiProperty({ type: () => User })
+  user: User;
 
   @ApiProperty({ type: Number })
   userId: number;

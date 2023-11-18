@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { ProfilesModule } from './modules/profiles/profiles.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
+import { RolepermissionsModule } from './modules/rolepermissions/rolepermissions.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
     ProfilesModule,
     RolesModule,
     PermissionsModule,
+    RolepermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
