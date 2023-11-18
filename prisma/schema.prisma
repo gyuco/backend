@@ -5,14 +5,81 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+    provider = "prisma-class-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model tasks {
-  id               Int      @id @default(autoincrement())
-  task_name        String
-  task_description String   @db.Text
-  created_at       DateTime @default(now())
+model providers {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  logins     logins[]
+}
+
+model logins {
+  id         Int       @id @default(autoincrement())
+  username   String
+  password   String
+  token      String?
+  created_at DateTime  @default(now())
+  active     Boolean
+  provider   providers @relation(fields: [providerId], references: [id])
+  providerId Int
+  user       users     @relation(fields: [userId], references: [id])
+  userId     Int
+}
+
+model users {
+  id         Int        @id @default(autoincrement())
+  firstname  String
+  lastname   String
+  created_at DateTime   @default(now())
+  logins     logins[]
+  profiles   profiles[]
+}
+
+model profiles {
+  id         Int      @id @default(autoincrement())
+  name       String
+  country    String
+  city       String
+  postalcode String
+  address    String
+  birthday   DateTime
+  created_at DateTime @default(now())
+  user       users    @relation(fields: [userId], references: [id])
+  userId     Int
+  role       roles    @relation(fields: [roleId], references: [id])
+  roleId     Int
+}
+
+model roles {
+  id               Int                @id @default(autoincrement())
+  name             String
+  created_at       DateTime           @default(now())
+  permissions      permissions[]
+  profiles         profiles[]
+  role_permissions role_permissions[]
+}
+
+model permissions {
+  id               Int                @id @default(autoincrement())
+  name             String
+  created_at       DateTime           @default(now())
+  role             roles              @relation(fields: [roleId], references: [id])
+  roleId           Int
+  role_permissions role_permissions[]
+}
+
+model role_permissions {
+  id           Int         @id @default(autoincrement())
+  role         roles       @relation(fields: [roleId], references: [id])
+  roleId       Int
+  permission   permissions @relation(fields: [permissionId], references: [id])
+  permissionId Int
 }
