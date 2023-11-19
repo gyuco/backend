@@ -7,7 +7,8 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthEntity } from './entities/auth.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-
+import { RegisterDto } from './dto/register.dto';
+export const roundsOfHashing = 10;
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,5 +35,44 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign({ userId: user.id }),
     };
+  }
+
+  async register(register: RegisterDto) {
+    try {
+      let result;
+      await this.prisma.$transaction(async (prisma) => {
+        const createdUser = await prisma.user.create({
+          data: {
+            firstname: register.firstname,
+            lastname: register.lastname,
+          },
+        });
+
+        const hashedPassword = await bcrypt.hash(
+          register.password,
+          roundsOfHashing,
+        );
+
+        const login = {
+          username: register.username,
+          password: hashedPassword,
+          token: register.token,
+          providerId: register.providerId,
+          active: register.active,
+          userId: createdUser.id,
+        };
+        await prisma.login.create({
+          data: login,
+        });
+
+        result = {
+          user: createdUser,
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }

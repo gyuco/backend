@@ -20,16 +20,17 @@ model Provider {
   name       String
   created_at DateTime @default(now())
   logins     Login[]
+
   @@map("providers")
 }
 
 model Login {
   id         Int      @id @default(autoincrement())
-  username   String @unique
+  username   String   @unique
   password   String
   token      String?
   created_at DateTime @default(now())
-  active     Boolean
+  active     Boolean  @default(false)
   provider   Provider @relation(fields: [providerId], references: [id])
   providerId Int
   user       User     @relation(fields: [userId], references: [id])
@@ -54,9 +55,9 @@ model Role {
   name           String
   created_at     DateTime         @default(now())
   permissions    Permission[]
+  RolePermission RolePermission[]
   User           User?            @relation(fields: [userId], references: [id])
   userId         Int?
-  RolePermission RolePermission[]
 
   @@map("roles")
 }

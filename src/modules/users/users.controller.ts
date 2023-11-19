@@ -21,6 +21,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: User })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
