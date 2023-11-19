@@ -8,6 +8,7 @@ import { AuthEntity } from './entities/auth.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 export const roundsOfHashing = 10;
 @Injectable()
 export class AuthService {
@@ -16,24 +17,48 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(username: string, password: string): Promise<AuthEntity> {
-    const user = await this.prisma.login.findFirst({
+  async login(bodyLogin: LoginDto): Promise<AuthEntity> {
+    const login = await this.prisma.login.findFirst({
       where: {
-        username,
+        username: bodyLogin.username,
+        providerId: bodyLogin.providerId,
       },
     });
 
-    if (!user) {
-      throw new NotFoundException(`No user found: ${username}`);
+    if (!login) {
+      throw new NotFoundException(`No user found: ${bodyLogin.username}`);
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
+    if (!login.active) {
+      throw new UnauthorizedException('User is not active');
     }
 
+    if (bodyLogin.token) {
+      if (bodyLogin.token !== login.token) {
+        throw new UnauthorizedException('Invalid token');
+      }
+    } else {
+      const isPasswordValid = await bcrypt.compare(
+        bodyLogin.password,
+        login.password,
+      );
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('Invalid password');
+      }
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: login.userId,
+      },
+    });
     return {
+      user,
       accessToken: this.jwtService.sign({ userId: user.id }),
+      refreshToken: this.jwtService.sign(
+        { userId: user.id },
+        { expiresIn: '1d' },
+      ),
     };
   }
 
