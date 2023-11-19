@@ -17,6 +17,12 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  /**
+   * Performs a login operation.
+   *
+   * @param {LoginDto} bodyLogin - the login data.
+   * @return {Promise<AuthEntity>} - the authenticated user information.
+   */
   async login(bodyLogin: LoginDto): Promise<AuthEntity> {
     const login = await this.prisma.login.findFirst({
       where: {
@@ -62,6 +68,12 @@ export class AuthService {
     };
   }
 
+  /**
+   * Registers a new user.
+   *
+   * @param {RegisterDto} register - The registration data for the new user.
+   * @return {Promise<any>} - The result of the registration process.
+   */
   async register(register: RegisterDto) {
     try {
       let result;

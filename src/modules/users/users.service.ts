@@ -14,13 +14,13 @@ export class UsersService {
     });
 
     return {
-      statusCode: 200,
+      statusCode: 201,
       data: createData,
     };
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return await this.prisma.user.findMany();
   }
 
   async findOne(id: number) {
@@ -29,10 +29,7 @@ export class UsersService {
         id,
       },
     });
-    return {
-      statusCode: 200,
-      data: dataUser,
-    };
+    return dataUser;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
