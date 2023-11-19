@@ -3,19 +3,26 @@ import { AppModule } from './src/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
+import 'winston-daily-rotate-file';
 import { transports, format } from 'winston';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger({
       transports: [
-        new transports.File({
-          filename: `logs/error.log`,
+        new transports.DailyRotateFile({
+          filename: `logs/%DATE%-error.log`,
           level: 'error',
           format: format.combine(format.timestamp(), format.json()),
+          datePattern: 'YYYY-MM-DD',
+          zippedArchive: false,
+          maxFiles: '30d', // 30 days
         }),
-        new transports.File({
-          filename: `logs/combined.log`,
+        new transports.DailyRotateFile({
+          filename: `logs/%DATE%-combined.log`,
           format: format.combine(format.timestamp(), format.json()),
+          datePattern: 'YYYY-MM-DD',
+          zippedArchive: false,
+          maxFiles: '30d',
         }),
         new transports.Console({
           format: format.combine(
