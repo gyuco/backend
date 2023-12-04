@@ -11,6 +11,8 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { RolepermissionsModule } from './modules/rolepermissions/rolepermissions.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
+import { MessagesModule } from './modules/messages/messages.module';
+import { ChatsModule } from './modules/chats/chats.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { ChatModule } from './chat/chat.module';
     RolepermissionsModule,
     AuthModule,
     ChatModule,
+    MessagesModule,
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,6 @@
 import { Login } from './login';
 import { Role } from './role';
+import { Message } from './message';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class User {
@@ -20,4 +21,7 @@ export class User {
 
   @ApiProperty({ isArray: true, type: () => Role })
   roles: Role[];
+
+  @ApiProperty({ isArray: true, type: () => Message })
+  Message: Message[];
 }
